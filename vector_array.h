@@ -9,11 +9,11 @@ class VectorArray: public IArray<T> {
 private:
     T* m_dataPointer{nullptr};
     int m_size{0};
-    int m_capacity{10};
+    int m_vectorValue{10};
 public:
     VectorArray() = default;
     VectorArray(int initLength):
-        m_capacity(initLength)
+        m_vectorValue(initLength)
     {}
 
     ~VectorArray()
@@ -27,7 +27,7 @@ public:
     }
 
     void add(T item) override {
-        if(m_size % m_capacity == 0)
+        if(m_size % m_vectorValue == 0)
             resize();
         m_size++;
         *(m_dataPointer + m_size - 1) = item;
@@ -38,7 +38,7 @@ public:
     }
 
     void resize() {
-        T* temp = new T[m_size + m_capacity];
+        T* temp = new T[m_size + m_vectorValue];
         if(m_dataPointer) {
             memcpy(temp, m_dataPointer, sizeof(T)*m_size);
             delete [] m_dataPointer;
@@ -47,26 +47,39 @@ public:
     }
 
     void add(T item, int index) override {
-        if(m_size % m_capacity == 0)
-            resize(index);
+        bool dataCopied{false};
+
+        if(m_size % m_vectorValue == 0)
+            dataCopied = resize(index);
+
+        if(!dataCopied)
+            memcpy(m_dataPointer + index + 1, m_dataPointer + index, sizeof(T)*(m_size - index));
+
         *(m_dataPointer + index) = item;
+
         m_size++;
     }
 
-    void resize(int index) {
+    bool resize(int index) {
         assert(index > 0 && index < m_size);
-        T* temp = new T[m_size + 1];
+        bool dataCopied = false;
+
+        T* temp = new T[m_size + m_vectorValue];
         if(m_dataPointer) {
             memcpy(temp, m_dataPointer, sizeof(T)*(index));
             memcpy(temp + index + 1, m_dataPointer + index, sizeof(T)*(m_size - index));
             delete [] m_dataPointer;
+            dataCopied = true;
         }
         m_dataPointer = temp;
+        return dataCopied;
     }
 
     T remove(int index) {
         assert(index > 0 && index < m_size);
+        T result = *(m_dataPointer + index);
         memcpy(m_dataPointer + index, m_dataPointer + index + 1, sizeof(T)*(m_size - index));
         m_size--;
+        return result;
     }
 };

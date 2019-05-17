@@ -57,7 +57,30 @@ T testRemoveByIndexArray(IArray<T>& array, int position)
 using namespace boost::unit_test;
 BOOST_AUTO_TEST_SUITE(test_suite_main)
 
-BOOST_AUTO_TEST_CASE(arrays_test)
+BOOST_AUTO_TEST_CASE(arrays_test_for_basic_add_operation)
+{
+    constexpr int ELEMENTS_NUMBER = 10000;
+
+    SingleArray<int> sarray;
+    testAddArray<int>(sarray, ELEMENTS_NUMBER);
+
+    FactorArray<int, 50> farray(10);
+    testAddArray<int>(farray, ELEMENTS_NUMBER);
+
+    VectorArray<int> varray(10);
+    testAddArray<int>(varray, ELEMENTS_NUMBER);
+
+    MatrixArray<int> marray1(100);
+    testAddArray<int>(marray1, ELEMENTS_NUMBER);
+
+    MatrixArray<int> marray2(1000);
+    testAddArray<int>(marray2, ELEMENTS_NUMBER);
+
+    MatrixArray<int> marray3(10000);
+    testAddArray<int>(marray3, ELEMENTS_NUMBER);
+}
+
+BOOST_AUTO_TEST_CASE(arrays_test_for_add_and_remove_by_index_operation)
 {
     constexpr int POSITION = 3;
     int item = 1;
@@ -67,22 +90,34 @@ BOOST_AUTO_TEST_CASE(arrays_test)
     auto result = testRemoveByIndexArray<int>(sarray, POSITION);
     BOOST_CHECK_MESSAGE(item == result, "expected result is different");
 
-    VectorArray<int> varray(100);
-    testAddArray<int>(varray, 10000);
-    testAddByIndexArray<int>(sarray, item, POSITION);
-    result = testRemoveByIndexArray<int>(sarray, POSITION);
+    VectorArray<int> varray(10);
+    testAddArray<int>(varray, 9);
+    testAddByIndexArray<int>(varray, item, POSITION);
+    result = testRemoveByIndexArray<int>(varray, POSITION);
     BOOST_CHECK_MESSAGE(item == result, "expected result is different");
 
-//    FactorArray<int, 50> farray(10);
-//    testAddArray<int>(farray, 10000);
+    VectorArray<int> varray2(10);
+    testAddArray<int>(varray2, 10);
+    testAddByIndexArray<int>(varray2, item, POSITION);
+    result = testRemoveByIndexArray<int>(varray2, POSITION);
+    BOOST_CHECK_MESSAGE(item == result, "expected result is different");
 
-//    MatrixArray<int> marray1(100);
-//    testAddArray<int>(marray1, 100000);
+    FactorArray<int, 10> farray(10);
+    testAddArray<int>(farray, 9);
+    testAddByIndexArray<int>(farray, item, POSITION);
+    result = testRemoveByIndexArray<int>(farray, POSITION);
+    BOOST_CHECK_MESSAGE(item == result, "expected result is different");
 
-//    MatrixArray<int> marray2(1000);
-//    testAddArray<int>(marray2, 100000);
+    FactorArray<int, 10> farray2(10);
+    testAddArray<int>(farray2, 10);
+    testAddByIndexArray<int>(farray2, item, POSITION);
+    result = testRemoveByIndexArray<int>(farray2, POSITION);
+    BOOST_CHECK_MESSAGE(item == result, "expected result is different");
 
-//    MatrixArray<int> marray3(10000);
-//    testAddArray<int>(marray3, 100000);
+    MatrixArray<int> marray(3);
+    testAddArray<int>(marray, 10);
+    testAddByIndexArray<int>(marray, item, POSITION);
+    result = testRemoveByIndexArray<int>(marray, POSITION);
+    BOOST_CHECK_MESSAGE(item == result, "expected result is different");
 }
 BOOST_AUTO_TEST_SUITE_END()

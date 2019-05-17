@@ -35,13 +35,27 @@ public:
 
     void add(T item, int index) override {
 
-    }
+        if(m_size == m_array.size()*m_capacity)
+            m_array.add(VectorArray<T>(m_capacity));
 
-    void resize(int index) {
+        for(int i = index/m_capacity; i <= m_array.size(); i++)
+        {
+            if(m_array.get(i).size() < m_capacity)
+            {
+                m_array.get(index/m_capacity).add(item, index % m_capacity);
+                break;
+            }
+        }
 
-    }
+        m_size++;
+    }    
 
     T remove(int index) {
+        assert(index > 0 && index < m_size);
 
+        T result = get(index);
+        m_array.get(index/m_capacity).remove(index % m_capacity);
+        m_size--;
+        return result;
     }
 };
