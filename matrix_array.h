@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <type_traits>
 #include <cstring>
 #include "vector_array.h"
@@ -38,13 +38,31 @@ public:
         if(m_size == m_array.size()*m_capacity)
             m_array.add(VectorArray<T>(m_capacity));
 
+        //take all elements which should be moved in other collection
+        SingleArray<T> elementsForMove;
+
         for(int i = index/m_capacity; i <= m_array.size(); i++)
         {
-            if(m_array.get(i).size() < m_capacity)
+            if(m_array.get(i).size() == m_capacity)
             {
-                m_array.get(index/m_capacity).add(item, index % m_capacity);
-                break;
+                T lastElement = m_array.get(i).get(m_capacity - 1);
+                m_array.get(i).remove(m_capacity - 1);
+                elementsForMove.add(lastElement);
             }
+        }
+
+        //put the item into position
+        m_array.get(index/m_capacity).add(item, index % m_capacity);
+
+        //now move elementsForMove to new places in arrays
+        if(elementsForMove.size())
+        {
+            if(elementsForMove.size() != (m_array.size() - index/m_capacity - 1))
+                m_array.add(VectorArray<T>(m_capacity));
+
+            int j = 0;
+            for(int i = index/m_capacity + 1; i <= m_array.size(); i++, j++)
+                m_array.get(i).add(elementsForMove.get(j), 0);
         }
 
         m_size++;

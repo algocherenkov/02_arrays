@@ -38,6 +38,10 @@ public:
         return static_cast<T>(*(m_dataPointer + index));
     }
 
+    T* getPointer(int index) {
+        return static_cast<T*>((m_dataPointer + index));
+    }
+
     void resize() {
         T* temp = new T[m_size + 1];
         if(m_dataPointer) {
