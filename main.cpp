@@ -1,6 +1,7 @@
 #include <iostream>
 #include "matrix_array.h"
 #include "factor_array.h"
+#include "priority_queue.h"
 #include <string>
 #include <ctime>
 #include <chrono>
@@ -150,38 +151,55 @@ BOOST_AUTO_TEST_CASE(arrays_operation_time_10000_elements_in_every_array)
     testRemoveByIndexArray<int>(farray6, POSITION);
 }
 
-//BOOST_AUTO_TEST_CASE(arrays_test_for_add_and_remove_by_index_operation)
-//{
-//    constexpr int POSITION = 3;
-//    int item = 1;
-//    SingleArray<int> sarray;
-//    testAddArray<int>(sarray, 10);
-//    testAddByIndexArray<int>(sarray, item, POSITION);
-//    auto result = testRemoveByIndexArray<int>(sarray, POSITION);
-//    BOOST_CHECK_MESSAGE(item == result, "expected result from SingleArray is different");
+BOOST_AUTO_TEST_CASE(arrays_test_for_add_and_remove_by_index_operation)
+{
+    constexpr int POSITION = 3;
+    int item = 1;
+    SingleArray<int> sarray;
+    testAddArray<int>(sarray, 10);
+    testAddByIndexArray<int>(sarray, item, POSITION);
+    auto result = testRemoveByIndexArray<int>(sarray, POSITION);
+    BOOST_CHECK_MESSAGE(item == result, "expected result from SingleArray is different");
 
-//    VectorArray<int> varray(10);
-//    testAddArray<int>(varray, 9);
-//    testAddByIndexArray<int>(varray, item, POSITION);
-//    result = testRemoveByIndexArray<int>(varray, POSITION);
-//    BOOST_CHECK_MESSAGE(item == result, "expected result from VectorArray is different");
+    VectorArray<int> varray(10);
+    testAddArray<int>(varray, 9);
+    testAddByIndexArray<int>(varray, item, POSITION);
+    result = testRemoveByIndexArray<int>(varray, POSITION);
+    BOOST_CHECK_MESSAGE(item == result, "expected result from VectorArray is different");
 
-//    VectorArray<int> varray2(10);
-//    testAddArray<int>(varray2, 10);
-//    testAddByIndexArray<int>(varray2, item, POSITION);
-//    result = testRemoveByIndexArray<int>(varray2, POSITION);
-//    BOOST_CHECK_MESSAGE(item == result, "expected result from VectorArray is different");
+    VectorArray<int> varray2(10);
+    testAddArray<int>(varray2, 10);
+    testAddByIndexArray<int>(varray2, item, POSITION);
+    result = testRemoveByIndexArray<int>(varray2, POSITION);
+    BOOST_CHECK_MESSAGE(item == result, "expected result from VectorArray is different");
 
-//    FactorArray<int, 10> farray(10);
-//    testAddArray<int>(farray, 9);
-//    testAddByIndexArray<int>(farray, item, POSITION);
-//    result = testRemoveByIndexArray<int>(farray, POSITION);
-//    BOOST_CHECK_MESSAGE(item == result, "expected result from FactorArray from is different");
+    FactorArray<int, 10> farray(10);
+    testAddArray<int>(farray, 9);
+    testAddByIndexArray<int>(farray, item, POSITION);
+    result = testRemoveByIndexArray<int>(farray, POSITION);
+    BOOST_CHECK_MESSAGE(item == result, "expected result from FactorArray from is different");
 
-//    FactorArray<int, 10> farray2(10);
-//    testAddArray<int>(farray2, 10);
-//    testAddByIndexArray<int>(farray2, item, POSITION);
-//    result = testRemoveByIndexArray<int>(farray2, POSITION);
-//    BOOST_CHECK_MESSAGE(item == result, "expected result from FactorArray is different");
-//}
+    FactorArray<int, 10> farray2(10);
+    testAddArray<int>(farray2, 10);
+    testAddByIndexArray<int>(farray2, item, POSITION);
+    result = testRemoveByIndexArray<int>(farray2, POSITION);
+    BOOST_CHECK_MESSAGE(item == result, "expected result from FactorArray is different");
+}
+
+BOOST_AUTO_TEST_CASE(priority_queue_test)
+{
+    PriorityQueue<std::string> queue;
+    queue.enqueue("sara", 1);
+    queue.enqueue("john", 3);
+    queue.enqueue("barbara", 2);
+
+    auto result1 = queue.dequeue();
+    BOOST_CHECK_MESSAGE(*result1 == "john", "expected result is john");
+    auto result2 = queue.dequeue();
+    BOOST_CHECK_MESSAGE(*result2 == "barbara", "expected result is barbara");
+    auto result3 = queue.dequeue();
+    BOOST_CHECK_MESSAGE(*result3 == "sara", "expected result is sara");
+    auto result4 = queue.dequeue();
+    BOOST_CHECK_MESSAGE(result4 == nullptr, "expected result is nullptr");
+}
 BOOST_AUTO_TEST_SUITE_END()
